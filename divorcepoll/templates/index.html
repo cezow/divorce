@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divorce Prediction</title>
+</head>
+
+<body>
+    {% for question in questions%}
+    <p>{{question.name}}: {{question.text}} </p>
+    <label>
+        <input type="radio" id="{{question.name}}" name="{{question.name}}" value="0">Never
+    </label>
+    <label>
+        <input type="radio" id="{{question.name}}" name="{{question.name}}" value="1">Seldom
+    </label>
+    <label>
+        <input type="radio" id="{{question.name}}" name="{{question.name}}" value="2">Averagely
+    </label>
+    <label>
+        <input type="radio" id="{{question.name}}" name="{{question.name}}" value="3">Frequently
+    </label>
+    <label>
+        <input type="radio" id="{{question.name}}" name="{{question.name}}" value="4">Always
+    </label>
+    {% endfor %}
+
+    <input type="submit" value="Check" onclick="check()">
+
+    <div id="divInfo" style="visibility: hidden;">
+        You have aswered for all questions, so You can see the result now.
+        <form action="{% url 'result' %}" method="POST">
+            {% csrf_token %}
+            <input style="visibility: hidden;" name="listMain">
+            <input type="submit" value="Result">
+        </form>
+    </div>
+
+    <script>
+        function check() {
+            let answersList = [];
+            let answers = document.querySelectorAll('input[type=radio]:checked');
+            let divInfo = document.getElementById('divInfo');
+            if (answers.length === 54) {
+                for (let i = 0; i < answers.length; i++) {
+                    answersList.push(parseInt(answers[i].defaultValue))
+                };
+                document.querySelector('input[name=listMain]').value = answersList;
+                divInfo.style.visibility = 'visible'
+            } else {
+                alert("Please answer for all questions");
+            };
+        }
+    </script>
+</body>
+</html>
